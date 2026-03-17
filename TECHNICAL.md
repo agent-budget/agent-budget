@@ -51,7 +51,7 @@ agent-budget is designed to need as little access as possible:
 |---|---|---|
 | Read tool call results | Yes | Core function — detecting payments |
 | Write to its own data directory | Yes | Transaction log, tracked tools, submissions |
-| Network access (outbound) | Fetch only | Fetches `api.agent-budget.net/patterns.json` hourly — no payment data included |
+| Network access (outbound) | Fetch only | Fetches `api.agent-budget.net/patterns.json` daily — no payment data included |
 | Network access (inbound) | Localhost only | Dashboard server binds to `127.0.0.1`, never `0.0.0.0` |
 | Wallet keys or credentials | **No** | Observes results, never initiates payments |
 | Shell execution (exec) | **No** | Shell scripts are tools the agent calls, not the skill itself |

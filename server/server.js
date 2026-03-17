@@ -302,4 +302,4 @@ server.listen(PORT, HOST, () => {
 
 // Sync community patterns on startup, then refresh every hour
 syncPatterns();
-setInterval(syncPatterns, 60 * 60 * 1000);
+setInterval(syncPatterns, 24 * 60 * 60 * 1000);

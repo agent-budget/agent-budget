@@ -10,7 +10,7 @@ All transaction data stays on your machine:
 - Dashboard binds to `127.0.0.1:18920` — not reachable from the network
 - No payment data, transaction records, or personal information is sent anywhere
 - No wallet keys or credentials are accessed — the skill observes tool call results only
-- Outbound network: fetches a community-curated tool pattern list from `api.agent-budget.net/patterns.json` hourly; no payment data is included
+- Outbound network: fetches a community-curated tool pattern list from `api.agent-budget.net/patterns.json` daily; no payment data is included
 
 See [TECHNICAL.md](TECHNICAL.md) for the full security model, data model, and architecture.
 
