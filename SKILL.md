@@ -2,7 +2,7 @@
 name: agent-budget
 description: Tracks every payment your agent makes and presents it as a reviewable transaction statement. Dashboard at http://127.0.0.1:18920 (run dashboard.sh start)
 metadata:
-  { "openclaw": { "emoji": "📦" } }
+  { "openclaw": { "emoji": "💰" } }
 ---
 
 # agent-budget
