@@ -17,8 +17,13 @@ See [TECHNICAL.md](TECHNICAL.md) for the full security model, data model, and ar
 ## Install
 
 ```bash
-cp -r agent-budget ~/.openclaw/skills/agent-budget
-systemctl --user restart openclaw-gateway
+clawhub install agent-budget
+```
+
+Or manually:
+
+```bash
+git clone https://github.com/agent-budget/agent-budget.git ~/.openclaw/skills/agent-budget
 ```
 
 ## Use
