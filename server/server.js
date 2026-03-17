@@ -18,6 +18,7 @@ import {
   toCSV,
 } from "./transactions.js";
 import { SUGGESTIONS_PATH } from "./detectors.js";
+import { syncPatterns, submitPattern } from "./patterns-sync.js";
 
 const PORT = parseInt(process.env.AGENT_BUDGET_PORT || "18920", 10);
 const HOST = "127.0.0.1";
@@ -250,7 +251,8 @@ const server = createServer(async (req, res) => {
         tools.push(entry);
         saveTrackedTools(tools);
 
-        // If user opted to share with maintainers, log the submission
+        // If user opted to share with maintainers, POST to the community API
+        let submitted = false;
         if (data.send_to_maintainers) {
           appendSubmissionEntry({
             type: "tracked-tool-suggestion",
@@ -258,9 +260,14 @@ const server = createServer(async (req, res) => {
             description: entry.description,
             category: entry.category,
           });
+          submitted = await submitPattern({
+            tool_name_pattern: entry.tool_name_pattern,
+            description: entry.description,
+            category: entry.category,
+          });
         }
 
-        json(res, { tool: entry, submitted: !!data.send_to_maintainers }, 201);
+        json(res, { tool: entry, submitted }, 201);
         return;
       }
     }
@@ -292,3 +299,7 @@ const server = createServer(async (req, res) => {
 server.listen(PORT, HOST, () => {
   console.log(`agent-budget dashboard running at http://${HOST}:${PORT}`);
 });
+
+// Sync community patterns on startup, then refresh every hour
+syncPatterns();
+setInterval(syncPatterns, 60 * 60 * 1000);

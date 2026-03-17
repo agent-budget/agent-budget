@@ -9,6 +9,7 @@
 
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
+import { loadCachedPatterns } from "./patterns-sync.js";
 
 /**
  * @typedef {object} DetectedPayment
@@ -376,7 +377,16 @@ function loadTrackedTools() {
  * via the dashboard, and this detector will catch them.
  */
 function detectUserTracked(toolName, toolArgs, toolResult) {
-  const tracked = loadTrackedTools();
+  const local = loadTrackedTools();
+  const community = loadCachedPatterns();
+
+  // Merge: local patterns take priority — community fills in the rest
+  const localPatterns = new Set(local.map((t) => t.tool_name_pattern));
+  const tracked = [
+    ...local,
+    ...community.filter((c) => !localPatterns.has(c.tool_name_pattern)),
+  ];
+
   if (!tracked.length) return null;
 
   const match = tracked.find((t) => {
