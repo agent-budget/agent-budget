@@ -60,7 +60,7 @@ dashboard.sh url      # Print dashboard URL
 When a tool call completes, agent-budget inspects the tool name, arguments, and result to determine if a payment occurred. Detection covers:
 
 - **Known payment tools**: agent-wallet-cli, v402, ClawRouter, payment-skill, Stripe, PayPal, and other common payment APIs
-- **Heuristic detection**: tools named `stripe_*`, `paypal_*`, `checkout`, `purchase`, `buy`, etc., plus argument patterns containing monetary amounts with currency/recipient signals
+- **Heuristic detection**: tools named `stripe_*`, `paypal_*`, `checkout`, `purchase`, `buy`, etc., plus argument patterns containing monetary amounts with currency/recipient signals — logged as `status: "unverified"` since there is no formal payment signal; the owner should review these
 - **Generic x402**: any tool response containing `X-PAYMENT-RESPONSE` headers or x402 payment confirmations
 - **User-tracked tools**: custom patterns added by the user via the dashboard; optionally submitted to maintainers for inclusion in the community list
 - **Community patterns**: curated tool patterns fetched from `api.agent-budget.net/patterns.json` and refreshed daily — expands detection coverage automatically as new payment tools are discovered by the community

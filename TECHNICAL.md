@@ -153,6 +153,22 @@ On startup and every hour, the skill fetches `api.agent-budget.net/patterns.json
 
 Community patterns are maintained at [github.com/mattpolly/agent-budget.net](https://github.com/mattpolly/agent-budget.net). The fetch is read-only; no payment data or transaction records are included in any request to that host. The only outbound write is an opt-in pattern submission from the dashboard (`data/submissions.jsonl` records what was sent locally).
 
+### Detection Confidence
+
+Not all detectors provide the same certainty that a payment occurred. Detectors with formal signals (a recognized tool name + structured result, an x402 payment header, a user-explicitly-tracked pattern) produce `status: "confirmed"`. The heuristic detector — which matches on tool name keywords or argument patterns without a formal payment signal — produces `status: "unverified"`.
+
+| Detector | Status | Signal basis |
+|---|---|---|
+| User-tracked | `confirmed` | Owner explicitly flagged this tool as a payment tool |
+| agent-wallet-cli | `confirmed` | Tool name + x402 subcommand in args |
+| v402 | `confirmed` | Tool name match |
+| ClawRouter | `confirmed` | Tool name match |
+| payment-skill | `confirmed` | Tool name match |
+| Heuristic | `unverified` | Keyword match on tool name or argument patterns |
+| Generic x402 | `confirmed` | Formal x402 payment header or body marker |
+
+Unverified transactions appear in the dashboard with a distinct badge and an "Unverified" summary card when any are present. The owner can review and promote them to confirmed (via manual log entry) or ignore them.
+
 ### Adding New Detectors
 
 To support a new payment tool:
@@ -226,7 +242,7 @@ Each record is a single JSON object, one per line in `transactions.jsonl`:
 | `context.input_hash` | string\|null | SHA-256 of tool arguments (for loop detection) |
 | `execution_time_ms` | number\|null | Time from tool call start to completion |
 | `failure_type` | string\|null | `null` (success), `"pre_payment"`, or `"post_payment"` |
-| `status` | string | `"confirmed"`, `"failed"`, or `"pending"` |
+| `status` | string | `"confirmed"`, `"unverified"`, `"failed"`, or `"pending"` |
 | `source` | string | `"auto"` (detected) or `"manual"` (user-entered) |
 
 ### Why JSONL

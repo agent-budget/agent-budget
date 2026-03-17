@@ -329,7 +329,9 @@ function detectHeuristic(toolName, toolArgs, toolResult) {
     idempotency_key: common.idempotencyKey,
     tool_name: toolName,
     tool_args_summary: truncate(argsStr, 200),
-    status: common.status,
+    // Heuristic matches have no formal payment signal — mark as unverified
+    // so the owner can review rather than treating them as confirmed spend.
+    status: common.failureType ? common.status : "unverified",
     failure_type: common.failureType,
     _detector: "heuristic",
   };
